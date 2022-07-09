@@ -1,0 +1,2 @@
+#!/opt/homebrew/bin/fish
+bundle exec fastlane spaceauth -u $FASTLANE_USER
