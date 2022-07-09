@@ -11,9 +11,13 @@ class ViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view.
   }
 
+  @IBAction func didTapTestCrashButton(_ sender: Any) {
+    // テスト用にクラッシュさせる
+    let number = [0]
+    let _ = number[1]
+  }
 
 }
 
