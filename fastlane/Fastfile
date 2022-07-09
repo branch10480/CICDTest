@@ -49,7 +49,7 @@ platform :ios do
     )
     sh(
       "../script/upload-symbols",
-      "-gsp", "../GoogleService-Info.plist",
+      "-gsp", "../CICDTest/GoogleService-Info.plist",
       "-p", "ios",
       "CICDTest.app.dSYM.zip"
     )
