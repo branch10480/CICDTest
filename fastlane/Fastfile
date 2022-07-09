@@ -16,8 +16,61 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Description of what the lane does"
-  lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
+  lane :test do
+    current_build_number = app_store_build_number(
+      live: false,
+      app_identifier: "me.toshi-sv.cicdtest",
+      initial_build_number: 0
+    )
+    puts current_build_number
+    puts current_build_number + 1
+  end
+
+  desc "ビルドしてAppStore Connectにアップロード, CrashlyticsへdSYMをアップロード"
+  lane :app_store do
+    create_keychain_for_CI if is_ci
+    match(
+      type: "appstore",
+      readonly: true,
+      keychain_name: "CICDTest",
+      keychain_password: ENV["MATCH_PASSWORD"]
+    )
+    current_build_number = app_store_build_number(
+      live: false,
+      app_identifier: "me.toshi-sv.cicdtest",
+      initial_build_number: 0
+    )
+    increment_build_number(
+      build_number: current_build_number + 1
+    )
+    gym(
+      scheme: "CICDTest",
+      configuration: "Release"
+    )
+    sh(
+      "../script/upload-symbols",
+      "-gsp", "../GoogleService-Info.plist",
+      "-p", "ios",
+      "CICDTest.app.dSYM.zip"
+    )
+    deliver(
+      skip_screenshots: true,
+      skip_metadata: true,
+      submit_for_review: false,
+      force: true
+    )
+  end
+
+  private_lane :create_keychain_for_CI do
+    create_keychain(
+      name: "CICDTest",
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false,
+      add_to_search_list: true
+    )
   end
 end
+
