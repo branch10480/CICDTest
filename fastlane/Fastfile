@@ -23,7 +23,7 @@ platform :ios do
 
   lane :test do
     begin
-      post_message_to_slack(message: "Skackへの投稿成功！")
+      post_message_to_slack(mssage: "Skackへの投稿成功！")
     rescue => e
       post_error_message_to_slack(message: e.message, e: e)
     end
@@ -112,28 +112,22 @@ platform :ios do
       success: false,
       slack_url: ENV["SLACK_WEB_HOOK_URL"],
       attachment_properties: {
-        blocks: [
+        "fields": [
           {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
-            }
+            "title": "App Name",
+            "value": ENV["APP_NAME"],
+            "short": false
           },
           {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*error message* \n #{e.message}"
-            }
+            "title": "Error Message",
+            "value": e.message,
+            "short": false
           },
           {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*github actions page* \n #{ENV["GITHUB_ACTIONS_PAGE"]}"
-            }
-          }
+            "title": "GitHub Actions Page",
+            "value": "#{ENV["GITHUB_ACTIONS_PAGE"]}",
+            "short": false
+          },
         ]
       }
     )
