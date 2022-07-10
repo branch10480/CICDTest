@@ -98,13 +98,13 @@ platform :ios do
 #              "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
 #            }
 #          },
-#          {
-#            "type": "section",
-#            "text": {
-#              "type": "mrkdwn",
-#              "text": "*app store connect* \n https://appstoreconnect.apple.com/"
-#            }
-#          }
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "*app store connect* \n https://appstoreconnect.apple.com/"
+            }
+          }
         ]
       }
     )
