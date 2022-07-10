@@ -2,7 +2,8 @@ name: Test
 
 on:
   push:
-    branches: []
+    paths:
+      - ".github/workflows/test.yml"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
