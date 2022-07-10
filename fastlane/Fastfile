@@ -16,6 +16,11 @@
 default_platform(:ios)
 
 platform :ios do
+  before_all do
+    ENV["APP_NAME"] = "CICDTest"
+    ENV["GITHUB_ACTIONS_PAGE"] = "https://github.com/branch10480/CICDTest/actions"
+  end
+
   lane :test do
     current_build_number = app_store_build_number(
       live: false,
@@ -28,37 +33,45 @@ platform :ios do
 
   desc "ビルドしてAppStore Connectにアップロード, CrashlyticsへdSYMをアップロード"
   lane :app_store do
-    create_keychain_for_CI if is_ci
-    match(
-      type: "appstore",
-      readonly: true,
-      keychain_name: "CICDTest",
-      keychain_password: ENV["MATCH_PASSWORD"]
-    )
-    current_build_number = app_store_build_number(
-      live: false,
-      app_identifier: "me.toshi-sv.cicdtest",
-      initial_build_number: 0
-    )
-    increment_build_number(
-      build_number: current_build_number + 1
-    )
-    gym(
-      scheme: "CICDTest",
-      configuration: "Release"
-    )
-    sh(
-      "../script/upload-symbols",
-      "-gsp", "../CICDTest/GoogleService-Info.plist",
-      "-p", "ios",
-      "CICDTest.app.dSYM.zip"
-    )
-    deliver(
-      skip_screenshots: true,
-      skip_metadata: true,
-      submit_for_review: false,
-      force: true
-    )
+    begin
+      create_keychain_for_CI if is_ci
+      match(
+        type: "appstore",
+        readonly: true,
+        keychain_name: "CICDTest",
+        keychain_password: ENV["MATCH_PASSWORD"]
+      )
+      current_build_number = app_store_build_number(
+        live: false,
+        app_identifier: "me.toshi-sv.cicdtest",
+        initial_build_number: 0
+      )
+      increment_build_number(
+        build_number: current_build_number + 1
+      )
+      gym(
+        scheme: "CICDTest",
+        configuration: "Release"
+      )
+      sh(
+        "../script/upload-symbols",
+        "-gsp", "../CICDTest/GoogleService-Info.plist",
+        "-p", "ios",
+        "CICDTest.app.dSYM.zip"
+      )
+      deliver(
+        skip_screenshots: true,
+        skip_metadata: true,
+        submit_for_review: false,
+        force: true
+      )
+      post_message_to_slack("AppStore Connect へのアップロードが完了しました🎉")
+    rescue => e
+      puts e.message
+      puts e.backtrace.join("\n")
+      post_error_message_to_slack("AppStore Connectへのアップロードに失敗しました😭")
+      raise e
+    end
   end
 
   private_lane :create_keychain_for_CI do
@@ -71,6 +84,61 @@ platform :ios do
       lock_when_sleeps: false,
       add_to_search_list: true
     )
+  end
+
+  def post_message_to_slack(message:)
+    slack(
+      message: message,
+      success: true,
+      slack_url: ENV["SLACK_WEBHOOK_URL"],
+      attachments: [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
+          }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "*app store connect* \n https://appstoreconnect.apple.com/"
+          }
+        }
+      ]
+    )
+  end
+
+  def post_error_message_to_slack(message:, e:)
+    slack(
+      message: message,
+      success: false,
+      slack_url: env["slack_webhook_url"],
+      attachments: [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
+          }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "*error message* \n #{e.message}"
+          }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "*github actions page* \n #{ENV["GITHUB_ACTIONS_PAGE"]}"
+          }
+        }
+      ]
+    }
   end
 end
 
