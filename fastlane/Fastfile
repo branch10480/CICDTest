@@ -22,13 +22,10 @@ platform :ios do
   end
 
   lane :test do
-    current_build_number = app_store_build_number(
-      live: false,
-      app_identifier: "me.toshi-sv.cicdtest",
-      initial_build_number: 0
-    )
-    puts current_build_number
-    puts current_build_number + 1
+    begin
+      post_message_to_slack(message: "Skackへの投稿成功！")
+    rescue => e
+      post_error_message_to_slack(message: e.message, e: e)
   end
 
   desc "ビルドしてAppStore Connectにアップロード, CrashlyticsへdSYMをアップロード"
@@ -91,7 +88,7 @@ platform :ios do
       message: message,
       success: true,
       slack_url: ENV["SLACK_WEB_HOOK_URL"],
-      attachments: [
+      attachment_properties: [
         {
           blocks: [
             {
@@ -119,7 +116,7 @@ platform :ios do
       message: message,
       success: false,
       slack_url: ENV["SLACK_WEB_HOOK_URL"],
-      attachments: [
+      attachment_properties: [
         {
           blocks: [
             {
