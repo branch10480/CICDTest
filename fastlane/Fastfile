@@ -26,6 +26,7 @@ platform :ios do
       post_message_to_slack(message: "Skackへの投稿成功！")
     rescue => e
       post_error_message_to_slack(message: e.message, e: e)
+    end
   end
 
   desc "ビルドしてAppStore Connectにアップロード, CrashlyticsへdSYMをアップロード"
