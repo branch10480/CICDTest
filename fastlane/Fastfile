@@ -69,7 +69,7 @@ platform :ios do
     rescue => e
       puts e.message
       puts e.backtrace.join("\n")
-      post_error_message_to_slack("AppStore Connectへのアップロードに失敗しました😭")
+      post_error_message_to_slack("AppStore Connectへのアップロードに失敗しました😭", e)
       raise e
     end
   end
