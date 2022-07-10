@@ -93,18 +93,22 @@ platform :ios do
       slack_url: ENV["SLACK_WEBHOOK_URL"],
       attachments: [
         {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
-          }
-        },
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "*app store connect* \n https://appstoreconnect.apple.com/"
-          }
+          blocks: [
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*app store connect* \n https://appstoreconnect.apple.com/"
+              }
+            }
+          ]
         }
       ]
     )
@@ -117,25 +121,29 @@ platform :ios do
       slack_url: env["slack_webhook_url"],
       attachments: [
         {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
-          }
-        },
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "*error message* \n #{e.message}"
-          }
-        },
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "*github actions page* \n #{ENV["GITHUB_ACTIONS_PAGE"]}"
-          }
+          blocks: [
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*error message* \n #{e.message}"
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*github actions page* \n #{ENV["GITHUB_ACTIONS_PAGE"]}"
+              }
+            }
+          ]
         }
       ]
     )
