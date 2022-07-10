@@ -88,25 +88,25 @@ platform :ios do
     slack(
       message: message,
       success: true,
-      slack_url: ENV["SLACK_WEB_HOOK_URL"],
-      attachment_properties: {
-        blocks: [
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
-            }
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*app store connect* \n https://appstoreconnect.apple.com/"
-            }
-          }
-        ]
-      }
+      slack_url: ENV["SLACK_WEB_HOOK_URL"]
+      #attachment_properties: {
+      #  blocks: [
+      #    {
+      #      "type": "section",
+      #      "text": {
+      #        "type": "mrkdwn",
+      #        "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
+      #      }
+      #    },
+      #    {
+      #      "type": "section",
+      #      "text": {
+      #        "type": "mrkdwn",
+      #        "text": "*app store connect* \n https://appstoreconnect.apple.com/"
+      #      }
+      #    }
+      #  ]
+      #}
     )
   end
 
