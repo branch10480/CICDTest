@@ -65,11 +65,11 @@ platform :ios do
         submit_for_review: false,
         force: true
       )
-      post_message_to_slack("AppStore Connect へのアップロードが完了しました🎉")
+      post_message_to_slack(message: "AppStore Connect へのアップロードが完了しました🎉")
     rescue => e
       puts e.message
       puts e.backtrace.join("\n")
-      post_error_message_to_slack("AppStore Connectへのアップロードに失敗しました😭", e)
+      post_error_message_to_slack(message: "AppStore Connectへのアップロードに失敗しました😭", e: e)
       raise e
     end
   end
