@@ -90,28 +90,17 @@ platform :ios do
       success: true,
       slack_url: ENV["SLACK_WEB_HOOK_URL"],
       attachment_properties: {
-        "blocks": [
+        "fields": [
           {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
-            }
-          }
-#          {
-#            "type": "section",
-#            "text": {
-#              "type": "mrkdwn",
-#              "text": "*アプリ名* \n #{ENV["APP_NAME"]}"
-#            }
-#          }
-#          {
-#            "type": "section",
-#            "text": {
-#              "type": "mrkdwn",
-#              "text": "*app store connect* \n https://appstoreconnect.apple.com/"
-#            }
-#          }
+            "title": "App Name",
+            "value": ENV["APP_NAME"],
+            "short": false
+          },
+          {
+            "title": "AppStore Connect",
+            "value": "https://appstoreconnect.apple.com/",
+            "short": false
+          },
         ]
       }
     )
