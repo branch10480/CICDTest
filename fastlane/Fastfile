@@ -118,7 +118,7 @@ platform :ios do
     slack(
       message: message,
       success: false,
-      slack_url: env["slack_webhook_url"],
+      slack_url: ENV["SLACK_WEBHOOK_URL"],
       attachments: [
         {
           blocks: [
