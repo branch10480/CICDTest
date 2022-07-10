@@ -88,7 +88,7 @@ platform :ios do
     slack(
       message: message,
       success: true,
-      slack_url: ENV["SLACK_WEB_HOOK_URL"]
+      slack_url: ENV["SLACK_WEB_HOOK_URL"],
       attachment_properties: {
         "blocks": [
           {
